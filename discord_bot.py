@@ -17,7 +17,7 @@ bot = discord.Bot()
 _1_MINUTES_IN_SECONDS = 1 * 60
 _6_HOURS_IN_SECONDS = 6 * 60 * 60
 
-last_time_update = datetime.now(timezone)
+last_time_update: datetime
 
 logger = get_logger(__name__)
 
@@ -34,7 +34,12 @@ async def games_tracker():
         if updates:
             message = '\n'.join(updates)
             logger.debug(f'Sending {message=}')
+
             last_time_update = datetime.now(timezone)
+            games_management.save_last_time_update_to_file(last_time_update, 'last_time_update.dat')
+
+            games_management.save_games_to_file('games_data.dat')
+
             await bot.get_channel(CHANNEL_ID).send(message)
 
         time_passed = int((datetime.now(timezone) - time_start_ping).total_seconds())
@@ -46,6 +51,9 @@ async def games_tracker():
 @bot.event
 async def on_ready():
     logger.debug('Bot is up...')
+    global last_time_update
+    last_time_update = games_management.get_last_time_update_from_file('last_time_update.dat')
+    games_management.load_games_from_file('games_data.dat')
     await games_tracker()
 
 
