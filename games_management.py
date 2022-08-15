@@ -103,7 +103,10 @@ def save_games_to_file(filename: str) -> None:
 
 def get_last_time_update_from_file(filename: str) -> datetime:
     if not os.path.isfile(filename):
-        return datetime.min
+        now = datetime.now(timezone)
+        with open(filename, mode='wb') as file:
+            pickle.dump(now, file)  # create file and add datetime.now
+        return now
 
     with open(filename, mode='rb') as file:
         file_data = pickle.load(file)
