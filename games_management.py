@@ -1,4 +1,5 @@
 import os
+import pickle
 from datetime import datetime
 from typing import List, Tuple
 
@@ -77,6 +78,42 @@ def remove_game_by_url(game_url: str) -> Tuple[bool, str, str]:
     game_name = games_data.pop(game_url)['name']
     logger.debug(f'{game_name=} removed successfully')
     return True, '', game_name
+
+
+def load_games_from_file(filename: str) -> None:
+    if not os.path.isfile(filename):
+        with open(filename, mode='wb') as file:
+            pickle.dump({}, file)  # create file and add empty dictionary
+        return
+
+    with open(filename, mode='rb') as file:
+        file_data = pickle.load(file)
+        assert type(file_data) == dict
+        global games_data
+        games_data = file_data
+
+
+def save_games_to_file(filename: str) -> None:
+    if not games_data:
+        return
+
+    with open(filename, mode='wb') as file:
+        pickle.dump(games_data, file)
+
+
+def get_last_time_update_from_file(filename: str) -> datetime:
+    if not os.path.isfile(filename):
+        return datetime.min
+
+    with open(filename, mode='rb') as file:
+        file_data = pickle.load(file)
+        assert type(file_data) == datetime
+        return file_data
+
+
+def save_last_time_update_to_file(last_time_update: datetime, filename: str) -> None:
+    with open(filename, mode='wb') as file:
+        pickle.dump(last_time_update, file)
 
 
 def is_games_data_empty() -> bool:
