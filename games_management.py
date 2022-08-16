@@ -28,7 +28,7 @@ def update_games_data(last_time_update: datetime = datetime.now(timezone)) -> Li
                 f'{name} price was changed from {games_data[game_url]["last_price"]} '
                 f'{games_data[game_url]["last_currency"]} to {price} {currency}'
             )
-            games_data[game_url]['last_price'], games_data[game_url]['last_currency'] = price, currency
+            games_data[game_url].update({'last_price': price, 'last_currency': currency})
 
         elif (time_start_updating - last_time_update).total_seconds() >= _6_HOURS_IN_SECONDS:
             updates.append(
