@@ -31,7 +31,7 @@ def config_logger():
     configured = True
 
 
-def get_logger(name):
+def get_logger(name=None):
     if not configured:
         config_logger()
     return logging.getLogger(name)
