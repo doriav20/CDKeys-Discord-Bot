@@ -22,6 +22,9 @@ def update_games_data(last_time_update: datetime = datetime.now(timezone)) -> Li
     for game_url in games_data:
         name, price, currency = get_game_details(game_url)
 
+        if price == 0.0:
+            return []
+
         if price != games_data[game_url]['last_price']:
             logger.debug(f'{games_data[game_url]} price was updated')
             updates.append(
