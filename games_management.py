@@ -65,14 +65,19 @@ def add_game_by_url(game_url: str) -> Tuple[bool, str, str]:
         logger.debug(f'Invalid url {game_url=}')
         return False, 'invalid url', ''
 
-    if game_url in games_data:
+    game_name, price, currency = get_game_details(game_url)
+
+    if is_game_in_games_data(game_url, game_name):
         logger.debug(f'Already tracked game')
         return False, f'{games_data[game_url]["name"]} have already tracked', games_data[game_url]["name"]
 
-    game_name = get_cdkeys_game_name_by_url(game_url)
-    games_data[game_url] = {'name': game_name, 'last_price': 0.0, 'last_currency': ''}
+    games_data[game_url] = {'name': game_name, 'last_price': price, 'last_currency': currency}
     logger.debug(f'{game_name=} added successfully')
     return True, '', game_name
+
+
+def is_game_in_games_data(game_url: str, game_name: str) -> bool:
+    return game_url in games_data or any(filter(lambda details: details['name'] == game_name, games_data.values()))
 
 
 def remove_game_by_url(game_url: str) -> Tuple[bool, str, str]:
