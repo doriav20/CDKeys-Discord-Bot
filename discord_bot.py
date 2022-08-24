@@ -72,9 +72,10 @@ async def get_games(ctx):
 
 @bot.slash_command(name='add_game_by_url', description='Add game by url')
 async def add_game_by_url(ctx, game_url):
-    global last_time_update
     added, failed_reason, game_name = games_management.add_game_by_url(game_url)
     if added:
+        global last_time_update
+        last_time_update = datetime.now(timezone) - timedelta(seconds=_6_HOURS_IN_SECONDS)
         await ctx.send_response(f'{game_name} successfully added')
     else:
         await ctx.send_response(failed_reason)
