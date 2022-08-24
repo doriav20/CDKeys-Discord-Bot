@@ -38,6 +38,8 @@ def update_games_data(last_time_update: datetime = datetime.now(timezone)) -> Li
                 f'{name} price is still {games_data[game_url]["last_price"]} '
                 f'{games_data[game_url]["last_currency"]}'
             )
+
+    updates.sort()
     return updates
 
 
@@ -50,6 +52,8 @@ def get_games() -> List[str]:
         f'{games_data[game_url]["name"]} - {games_data[game_url]["last_price"]} {games_data[game_url]["last_currency"]}'
         for game_url in games_data
     ]
+    games.sort()
+
     logger.debug(f'get_games returned {games=}')
 
     return games
