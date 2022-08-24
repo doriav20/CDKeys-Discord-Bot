@@ -69,7 +69,7 @@ def add_game_by_url(game_url: str) -> Tuple[bool, str, str]:
 
     if is_game_in_games_data(game_url, game_name):
         logger.debug(f'Already tracked game')
-        return False, f'{games_data[game_url]["name"]} have already tracked', games_data[game_url]["name"]
+        return False, f'{game_name} have already tracked', game_name
 
     games_data[game_url] = {'name': game_name, 'last_price': price, 'last_currency': currency}
     logger.debug(f'{game_name=} added successfully')
