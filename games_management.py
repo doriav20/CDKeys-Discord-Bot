@@ -29,7 +29,7 @@ def update_games_data(last_time_update: datetime = datetime.now(timezone)) -> Li
             logger.debug(f'{games_data[game_url]} price was updated')
             updates.append(
                 f'{name} price was changed from {games_data[game_url]["last_price"]} '
-                f'{games_data[game_url]["last_currency"]} to {price} {currency}'
+                f'{games_data[game_url]["last_currency"]} to {price} {currency}\n{game_url}'
             )
             games_data[game_url].update({'last_price': price, 'last_currency': currency})
 
